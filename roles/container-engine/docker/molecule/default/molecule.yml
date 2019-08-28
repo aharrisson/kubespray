@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+platforms:
+  - name: kubespray-docker
+    box: ubuntu/bionic64
+    groups:
+      - k8s-cluster
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: ../../../../
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      kubespray-docker:
+        # TODO:
+        # This is an assumption that should not be made.
+        # Instead there should be a vars/ubuntu.yml file to
+        # handle Ubuntu installations without arch specified.
+        host_architecture: amd64
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
